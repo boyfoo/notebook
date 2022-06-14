@@ -1,6 +1,6 @@
-## 体外部署
+## 体外部署prometheus
 
-### 部署prometheus
+### 部署
 
 docker部署：
 ```bash
@@ -38,7 +38,7 @@ spec:
 进入`kube-state-metrics`文件夹，部署 `kb apply -f .`
 
 
-#### 配置获取基础组件指标
+#### 手动配置获取基础组件指标
 
 在 `config/prometheus.yml`内新增：
 
@@ -59,7 +59,7 @@ scrape_configs:
 
 查看指标： 打开`http://主机IP:9090/classic/graph`，选择复选框内的指标选项就能查看值
 
-### 配置node指标
+### 配置节点指标
 
 主要内容为CPU，内存，硬盘，I/O等
 
@@ -67,7 +67,7 @@ scrape_configs:
 
 查看部署结果 `http://{k8sIP}:9100`
 
-#### 配置获取node指标
+#### 手动配置获取节点指标
 
 在 `config/prometheus.yml`内新增：
 
@@ -79,4 +79,29 @@ scrape_configs:
 ```
 
 重载配置`curl -X POST http://主机IP:9090/-/reload`
+
+### 自动发现
+
+上面获取都是通过手动的方式，可以配置自动发现，两种都可以使用，只是自动发现更灵活
+
+创建一个集群角色`kb apply -f config/rbac.yaml`
+
+因为是体外部署`prometheus`，所以要在设置`sa token`来请求，提取token: 
+
+`kubectl -n kube-system describe secret $(kubectl -n kube-system describe sa my-prometheus | grep 'Mountable secrets' | cut -f 2- -d ":" | tr -d " ") | grep -E '^token' | cut -f2 -d':' | tr -d '\t'`
+
+将内容保存至`sa.token`
+
+新增`prometheus.yml`配置
+
+```yaml
+  - job_name: "k8s-node"
+  # 查看配置文件
+  ...
+```
+
+重载配置`curl -X POST http://主机IP:9090/-/reload`
+
+
+
 

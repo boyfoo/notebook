@@ -4,6 +4,24 @@ scrape_configs:
   - job_name: "prometheus-state-metrics"
     static_configs:
       - targets: ["192.168.99.105:32280"]
-  - job_name: "node-exporter"
-    static_configs:
-      - targets: [ "192.168.99.105:9100" ]
+#  - job_name: "node-exporter" # 手动配置注释 下面使用了自动获取
+#    static_configs:
+#      - targets: [ "192.168.99.105:9100" ]
+  - job_name: "k8s-node"
+    metrics_path: /metrics
+    kubernetes_sd_configs: # 这些设置如果prometheus不是在k8s内 他会自动知道
+      - api_server: https://192.168.99.105:8443 # 从.kube/config 内获取地址
+        role: node #模式 节点
+        bearer_token_file: /config/sa.token
+#        tls_config:
+#          ca_file:
+        tls_config:
+          insecure_skip_verify: true
+    relabel_configs: #重新默认标签
+      - source_labels: [__address__]  # 因为默认请求的接口端口是10250，而node-exporter部署使用的是9100端口 所以需要替换过来
+        regex: "(.*):10250"
+        replacement: "$1:9100"
+        target_label: __address__
+        action: replace
+
+
