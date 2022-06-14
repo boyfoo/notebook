@@ -14,7 +14,7 @@ $ docker run -d --name pm \
 
 访问`主机IP:9090`
 
-#### 配置k8s基础组件指标
+### 配置k8s基础组件指标
 
 https://github.com/kubernetes/kube-state-metrics
 
@@ -38,7 +38,7 @@ spec:
 进入`kube-state-metrics`文件夹，部署 `kb apply -f .`
 
 
-### 获取基础组件指标
+#### 获取基础组件指标
 
 在 `config/prometheus.yml`内新增：
 
