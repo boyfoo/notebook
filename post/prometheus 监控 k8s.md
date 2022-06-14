@@ -38,7 +38,7 @@ spec:
 进入`kube-state-metrics`文件夹，部署 `kb apply -f .`
 
 
-#### 获取基础组件指标
+#### 配置获取基础组件指标
 
 在 `config/prometheus.yml`内新增：
 
@@ -67,7 +67,7 @@ scrape_configs:
 
 查看部署结果 `http://{k8sIP}:9100`
 
-#### 获取node指标
+#### 配置获取node指标
 
 在 `config/prometheus.yml`内新增：
 
@@ -79,3 +79,4 @@ scrape_configs:
 ```
 
 重载配置`curl -X POST http://主机IP:9090/-/reload`
+
