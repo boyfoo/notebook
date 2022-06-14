@@ -14,7 +14,9 @@ $ docker run -d --name pm \
 
 访问`主机IP:9090`
 
-### 配置k8s基础组件指标
+### 1. 配置k8s基础组件指标
+
+如`pod`,`svc`,`configmap`等资源的指标
 
 https://github.com/kubernetes/kube-state-metrics
 
@@ -59,7 +61,7 @@ scrape_configs:
 
 查看指标： 打开`http://主机IP:9090/classic/graph`，选择复选框内的指标选项就能查看值
 
-### 配置节点指标
+### 2. 配置节点指标
 
 主要内容为CPU，内存，硬盘，I/O等
 
@@ -84,6 +86,8 @@ scrape_configs:
 
 上面获取都是通过手动的方式，可以配置自动发现，两种都可以使用，只是自动发现更灵活
 
+#### 自动获取节点指标
+
 创建一个集群角色`kb apply -f config/rbac.yaml`
 
 因为是体外部署`prometheus`，所以要在设置`sa token`来请求，提取token: 
@@ -99,6 +103,8 @@ scrape_configs:
   # 查看配置文件
   ...
 ```
+
+此时获取的内容与手动配置`job_name: "node-exporter"`的内容相同，可以注释掉手动配置，避免重复获取
 
 重载配置`curl -X POST http://主机IP:9090/-/reload`
 
