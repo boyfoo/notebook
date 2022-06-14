@@ -14,7 +14,7 @@ $ docker run -d --name pm \
 
 访问`主机IP:9090`
 
-### k8s基础组件指标
+### 配置k8s基础组件指标
 
 https://github.com/kubernetes/kube-state-metrics
 
@@ -38,7 +38,7 @@ spec:
 进入`kube-state-metrics`文件夹，部署 `kb apply -f .`
 
 
-### 获取指标
+### 获取基础组件指标
 
 在 `config/prometheus.yml`内新增：
 
@@ -58,3 +58,11 @@ scrape_configs:
 查看添加结果：`http://主机IP:9090/service-discovery`
 
 查看指标： 打开`http://主机IP:9090/classic/graph`，选择复选框内的指标选项就能查看值
+
+### 配置node指标
+
+主要内容为CPU，内存，硬盘，I/O等
+
+
+
+
