@@ -14,7 +14,7 @@ $ docker run -d --name pm \
 
 访问`主机IP:9090`
 
-### 配置k8s基础组件指标
+#### 配置k8s基础组件指标
 
 https://github.com/kubernetes/kube-state-metrics
 
@@ -63,6 +63,19 @@ scrape_configs:
 
 主要内容为CPU，内存，硬盘，I/O等
 
+部署 `kb apply -f node-exporter/install.yaml`
 
+查看部署结果 `http://{k8sIP}:9100`
 
+#### 获取node指标
 
+在 `config/prometheus.yml`内新增：
+
+```yaml
+scrape_configs:
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["$(k8sIP):9100"]
+```
+
+重载配置`curl -X POST http://主机IP:9090/-/reload`
