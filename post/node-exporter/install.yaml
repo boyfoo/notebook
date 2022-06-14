@@ -33,7 +33,7 @@ spec:
               memory: 100Mi
             limits:
               cpu: 1000m
-              mempry: 1Gi
+              memory: 1Gi
           securityContext:
             privileged: true # 以特权方式运行（能够访问宿主机设备）
           args:
