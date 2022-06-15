@@ -108,6 +108,10 @@ scrape_configs:
 
 重载配置`curl -X POST http://主机IP:9090/-/reload`
 
+#### 自动获取pod指标
 
+`kubelet`默认集成了`cAdvisor`单节点内部容器和节点资源使用统计
 
+实例 `kb get --raw "/api/v1/nodes/{nodename}/proxy/metrics/cadvisor"`
 
+查看配置文件`config/prometheus.yml`内`  - job_name: "k8s-kubelet"` 的配置

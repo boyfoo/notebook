@@ -23,5 +23,22 @@ scrape_configs:
         replacement: "$1:9100"
         target_label: __address__
         action: replace
-
-
+  - job_name: "k8s-kubelet"
+    scheme: https
+    bearer_token_file: /config/sa.token #抓取用的
+    tls_config:
+      insecure_skip_verify: true
+    kubernetes_sd_configs:  #服务发现用的
+      - api_server: https://192.168.99.105:8443
+        role: node
+        bearer_token_file: /config/sa.token
+        tls_config:
+          insecure_skip_verify: true
+    relabel_configs:
+      - target_label: __address__
+        replacement: 192.168.99.105:8443 #apiservet地址
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: "(.+)"
+        replacement: "/api/v1/nodes/$1/proxy/metrics/cadvisor"
+        target_label: __metrics_path__
+        action: replace
