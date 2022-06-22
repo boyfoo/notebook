@@ -115,3 +115,26 @@ scrape_configs:
 实例 `kb get --raw "/api/v1/nodes/{nodename}/proxy/metrics/cadvisor"`
 
 查看配置文件`config/prometheus.yml`内`  - job_name: "k8s-kubelet"` 的配置
+
+## 安装 prometheus-adapter
+
+将`https://github.com/kubernetes-sigs/prometheus-adapter/tree/master/deploy/manifests`内的文件保存至`adapter/manifests`下
+
+创建命名空间 `kb create ns custom-metrics`
+
+签发一个证书，使用k8s的`ca`证书
+
+```
+$ openssl genrsa -out serving.key 2048
+$ openssl req -new -key serving.key -out serving.csr -subj "/CN=serving"
+$ openssl x509 -req -in serving.csr -CA ./ca.crt -CAkey ./ca.key -CAcreateserial -out serving.crt -days 3650
+$ kb create secret generic cm-adapter-serving-certs --from-file=serving.crt=./serving.crt --from-file=serving.key -n custom-metrics
+```
+
+
+修改 `custom-metrics-apiserver-deployment.yaml`内
+```
+image: willdockerhub/prometheus-adapter:v0.9.0
+- --prometheus-url=http://192.168.111.135:9090/
+```
+
