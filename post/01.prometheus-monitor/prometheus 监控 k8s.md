@@ -131,6 +131,8 @@ $ openssl x509 -req -in serving.csr -CA ./ca.crt -CAkey ./ca.key -CAcreateserial
 $ kb create secret generic cm-adapter-serving-certs --from-file=serving.crt=./serving.crt --from-file=serving.key -n custom-metrics
 ```
 
+证书用于给内部访问`apiserver`时使用
+
 修改 `custom-metrics-apiserver-deployment.yaml`内
 ```
 image: willdockerhub/prometheus-adapter:v0.9.0
@@ -142,3 +144,6 @@ image: willdockerhub/prometheus-adapter:v0.9.0
 查看部署结果`kb get pods -n custom-metrics` 和 `kb get apiservice | grep custom-metrics`有三个`api`
 
 查看`kube-system`命名空间下`pods`的`cpu`指标`kb get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/kube-system/pods/*/cpu_usage"`
+
+### GIN自定义指标
+
