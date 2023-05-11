@@ -4,6 +4,7 @@
 
 * <a href="post/01.ctl-log/readme.md" target="_blank"> 01. 常用的kubectl指令 </a>
 * <a href="post/01.prometheus-monitor/prometheus 监控 k8s.md" target="_blank"> 02. 部署 prometheus 监控 k8s各项指标 </a>
+* <a href="post/03.ip.md" target="_blank">ip工具网站 </a>
 * 正在加入
 
 # 其他项目
